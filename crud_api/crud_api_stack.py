@@ -67,6 +67,10 @@ class CrudApiStack(Stack):
         single_item.add_method("GET", items_integration)
         single_item.add_method("PUT", items_integration)
         single_item.add_method("DELETE", items_integration)
+                
+        # generates an IAM policy that lets the lambda handler read/write to the DynamoDB table
+        # without it, every API call returns AccessDeniedException
+        items_table.grant_read_write_data(api_handler)
         
         # prints the table name after deployment so we can verify it exists
         CfnOutput(
